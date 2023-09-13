@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.1/redux.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .container {
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id="red"></div>
+    <script>
+      function reducer(state, action) {
+        if (state === undefined) {
+          return { color: "yellow" };
+        }
+      }
+      const store = Redux.createStore(reducer);
+
+      function red() {
+        const state = store.getState();
+        document.querySelector("#red").innerHTML = `
+          <div class="container" id="component_red" style="background-color: ${state.color}">
+            <h1>Red</h1>
+            <input type="button" value="fire" onclick="
+              document.querySelector('#component_red').style.backgroundColor = 'red';
+              document.querySelector('#component_green').style.backgroundColor = 'red';
+              document.querySelector('#component_blue').style.backgroundColor = 'red';
+            ">
+          </div>
+        `;
+      }
+      red();
+    </script>
+  </body>
+</html>
