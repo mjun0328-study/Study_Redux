@@ -48,31 +48,63 @@
       function control() {
         document.querySelector("#control").innerHTML = `
           <ul>
-            <li><a href="/create">create</a></li>
+            <li><a onclick="
+              event.preventDefault();
+
+            " href="/create">create</a></li>
             <li><button>delete</button></li>
           </ul>
         `;
       }
       function article() {
         const state = store.getState();
-        let title, desc;
-        for (let i = 0; i < state.contents.length; i++) {
-          if (state.contents[i].id === state.selected_id) {
-            title = state.contents[i].title;
-            desc = state.contents[i].desc;
-            break;
+        if (state.mode === "create") {
+          document.querySelector("#article").innerHTML = `
+            <article>
+              <form onsubmit="
+                event.preventDefault();
+                const _title = this.title.value;
+                const _desc = this.desc.value;
+                store.dispatch({
+                  type: 'CREATE',
+                  title: _title,
+                  desc: _desc
+                });
+              ">
+                <p>
+                  <input type="text" placeholder="title" name="title">
+                </p>
+                <p>
+                  <textarea placeholder="description" name="desc"></textarea>
+                </p>
+                <p>
+                  <input type="submit">
+                </p>
+              </form>
+            </article>
+          `;
+        } else if (state.mode === "read") {
+          let title, desc;
+          for (let i = 0; i < state.contents.length; i++) {
+            if (state.contents[i].id === state.selected_id) {
+              title = state.contents[i].title;
+              desc = state.contents[i].desc;
+              break;
+            }
           }
+          document.querySelector("#article").innerHTML = `
+            <article>
+              <h2>${title}</h2>
+              ${desc}
+            </article>
+          `;
         }
-        document.querySelector("#article").innerHTML = `
-          <article>
-            <h2>${title}</h2>
-            ${desc}
-          </article>
-        `;
       }
       function reducer(state, action) {
         if (state === undefined) {
           return {
+            max_id: 2,
+            mode: "create",
             selected_id: 1,
             contents: [
               {
@@ -92,11 +124,24 @@
         let newState;
         if (action.type === "SELECT") {
           newState = Object.assign({}, state, { selected_id: action.id });
+        } else if (action.type === "CREATE") {
+          let newContents = state.contents.concat();
+          newContents.push({
+            id: state.max_id + 1,
+            title: action.title,
+            desc: action.desc,
+          });
+          newState = Object.assign({}, state, {
+            max_id: state.max_id + 1,
+            contents: newContents,
+            mode: "read",
+          });
         }
         console.log(action, state, newState);
         return newState;
       }
       const store = Redux.createStore(reducer);
+      store.subscribe(TOC);
       store.subscribe(article);
       subject();
       TOC();
