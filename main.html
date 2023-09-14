@@ -54,17 +54,26 @@
         `;
       }
       function article() {
+        const state = store.getState();
+        let title, desc;
+        for (let i = 0; i < state.contents.length; i++) {
+          if (state.contents[i].id === state.selected_id) {
+            title = state.contents[i].title;
+            desc = state.contents[i].desc;
+            break;
+          }
+        }
         document.querySelector("#article").innerHTML = `
           <article>
-            <h2>HTML</h2>
-            HTML is ...
+            <h2>${title}</h2>
+            ${desc}
           </article>
         `;
       }
       function reducer(state, action) {
         if (state === undefined) {
           return {
-            selected_id: null,
+            selected_id: 1,
             contents: [
               {
                 id: 1,
@@ -88,6 +97,7 @@
         return newState;
       }
       const store = Redux.createStore(reducer);
+      store.subscribe(article);
       subject();
       TOC();
       control();
