@@ -24,7 +24,18 @@
         const state = store.getState();
         let liTags = "";
         for (let i = 0; i < state.contents.length; i++) {
-          liTags += `<li><a href="${state.contents[i].id}.html">${state.contents[i].title}</a></li>`;
+          liTags += `
+            <li>
+              <a onclick="
+                event.preventDefault();
+                const action = {type: 'SELECT', id: ${state.contents[i].id}};
+                store.dispatch(action);
+              "
+              href="${state.contents[i].id}.html">
+                ${state.contents[i].title}
+              </a>
+            </li>
+          `;
         }
         document.querySelector("#toc").innerHTML = `
           <nav>
@@ -53,6 +64,7 @@
       function reducer(state, action) {
         if (state === undefined) {
           return {
+            selected_id: null,
             contents: [
               {
                 id: 1,
@@ -67,6 +79,13 @@
             ],
           };
         }
+
+        let newState;
+        if (action.type === "SELECT") {
+          newState = Object.assign({}, state, { selected_id: action.id });
+        }
+        console.log(action, state, newState);
+        return newState;
       }
       const store = Redux.createStore(reducer);
       subject();
