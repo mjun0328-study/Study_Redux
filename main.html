@@ -48,11 +48,17 @@
       function control() {
         document.querySelector("#control").innerHTML = `
           <ul>
-            <li><a onclick="
-              event.preventDefault();
-
-            " href="/create">create</a></li>
-            <li><button>delete</button></li>
+            <li>
+              <a onclick="
+                event.preventDefault();
+                store.dispatch({type: 'CHANGE_MODE', mode: 'create'})
+              " href="/create">create</a>
+            </li>
+            <li>
+              <button onclick="
+                store.dispatch({type: 'DELETE'})
+              ">delete</button>
+            </li>
           </ul>
         `;
       }
@@ -98,14 +104,21 @@
               ${desc}
             </article>
           `;
+        } else if (state.mode === "welcome") {
+          document.querySelector("#article").innerHTML = `
+            <article>
+              <h2>Welcome!</h2>
+              Hello, Redux!
+            </article>
+          `;
         }
       }
       function reducer(state, action) {
         if (state === undefined) {
           return {
             max_id: 2,
-            mode: "create",
-            selected_id: 1,
+            mode: "welcome",
+            selected_id: null,
             contents: [
               {
                 id: 1,
@@ -123,7 +136,10 @@
 
         let newState;
         if (action.type === "SELECT") {
-          newState = Object.assign({}, state, { selected_id: action.id });
+          newState = Object.assign({}, state, {
+            mode: "read",
+            selected_id: action.id,
+          });
         } else if (action.type === "CREATE") {
           let newContents = state.contents.concat();
           newContents.push({
@@ -135,6 +151,21 @@
             max_id: state.max_id + 1,
             contents: newContents,
             mode: "read",
+          });
+        } else if (action.type === "DELETE") {
+          let newContents = [];
+          for (let i = 0; i < state.contents.length; i++) {
+            if (state.contents[i].id !== state.selected_id) {
+              newContents.push(state.contents[i]);
+            }
+          }
+          newState = Object.assign({}, state, {
+            contents: newContents,
+            mode: "welcome",
+          });
+        } else if (action.type === "CHANGE_MODE") {
+          newState = Object.assign({}, state, {
+            mode: action.mode,
           });
         }
         console.log(action, state, newState);
