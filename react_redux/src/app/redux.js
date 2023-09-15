@@ -35,7 +35,6 @@ const stateSlice = createSlice({
         const topic = state.topics[i];
         if (topic.id !== state.select_id) {
           newTopics.push(topic);
-          break;
         }
       }
       state.topics = newTopics;
