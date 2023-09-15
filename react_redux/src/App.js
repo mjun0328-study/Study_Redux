@@ -1,20 +1,6 @@
 import "./style.css";
-import { createStore } from "redux";
+import { plus, store } from "./redux";
 import { Provider, useDispatch, useSelector } from "react-redux";
-
-const reducer = (currentState, action) => {
-  if (currentState === undefined)
-    return {
-      number: 1,
-    };
-  const newState = { ...currentState };
-  if (action.type === "PLUS") {
-    newState.number++;
-  }
-  return newState;
-};
-
-const store = createStore(reducer);
 
 export default function App() {
   return (
@@ -46,7 +32,7 @@ function Left2() {
   );
 }
 function Left3() {
-  const number = useSelector((state) => state.number);
+  const number = useSelector((state) => state.counter.number);
   return (
     <div>
       <h1>Left3: {number}</h1>
@@ -78,7 +64,7 @@ function Right3() {
         type="button"
         value="+"
         onClick={() => {
-          dispatch({ type: "PLUS" });
+          dispatch(plus());
         }}
       ></input>
     </div>
