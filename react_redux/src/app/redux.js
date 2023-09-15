@@ -33,10 +33,26 @@ const stateSlice = createSlice({
       const newTopics = [];
       for (let i = 0; i < state.topics.length; i++) {
         const topic = state.topics[i];
-        if (topic.id !== state.select_id) newTopics.push(topic);
+        if (topic.id !== state.select_id) {
+          newTopics.push(topic);
+          break;
+        }
       }
       state.topics = newTopics;
       state.select_id = 0;
+      state.mode = "read";
+    },
+    update: (state, action) => {
+      let i = 0;
+      for (; i < state.topics.length; i++) {
+        const topic = state.topics[i];
+        if (topic.id === state.select_id) break;
+      }
+      state.topics[i] = {
+        id: state.select_id,
+        title: action.payload.title,
+        desc: action.payload.desc,
+      };
       state.mode = "read";
     },
   },

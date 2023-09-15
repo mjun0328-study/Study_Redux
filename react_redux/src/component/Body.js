@@ -1,5 +1,5 @@
 import { Read } from "./Body/Read";
-import { Create } from "./Body/Create";
+import { Edit } from "./Body/Edit";
 import { useSelector } from "react-redux";
 
 export const Body = () => {
@@ -9,6 +9,8 @@ export const Body = () => {
     case "read":
       return <Read state={state} />;
     case "create":
-      return <Create state={state} />;
+      return <Edit state={state} />;
+    case "update":
+      return <Edit state={state} />;
   }
 };

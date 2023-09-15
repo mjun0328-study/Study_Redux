@@ -17,9 +17,17 @@ export const Tool = () => {
         </button>
       )}
       {mode === "read" && state.select_id !== 0 && (
-        <button type="button" onClick={() => dispatch(dispatching.delete())}>
-          delete
-        </button>
+        <>
+          <button type="button" onClick={() => dispatch(dispatching.delete())}>
+            delete
+          </button>
+          <button
+            type="button"
+            onClick={() => dispatch(dispatching.change_mode("update"))}
+          >
+            update
+          </button>
+        </>
       )}
     </div>
   );
