@@ -29,6 +29,16 @@ const stateSlice = createSlice({
       state.max_id++;
       state.mode = "read";
     },
+    delete: (state) => {
+      const newTopics = [];
+      for (let i = 0; i < state.topics.length; i++) {
+        const topic = state.topics[i];
+        if (topic.id !== state.select_id) newTopics.push(topic);
+      }
+      state.topics = newTopics;
+      state.select_id = 0;
+      state.mode = "read";
+    },
   },
 });
 

@@ -16,7 +16,11 @@ export const Tool = () => {
           create
         </button>
       )}
-      {mode === "read" && state.select_id !== 0 && <button>delete</button>}
+      {mode === "read" && state.select_id !== 0 && (
+        <button type="button" onClick={() => dispatch(dispatching.delete())}>
+          delete
+        </button>
+      )}
     </div>
   );
 };
