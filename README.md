@@ -6,4 +6,4 @@ React-Redux 기초 스터디
 23.9.12. ~
 
 https://opentutorials.org/module/4078<br>
-https://opentutorials.org/module/4518
+https://youtu.be/yjuwpf7VH74
